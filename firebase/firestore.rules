@@ -1,0 +1,139 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // ---------- Helpers ----------
+    function isSignedIn() {
+      return request.auth != null;
+    }
+    function isOwner(userId) {
+      return isSignedIn() && request.auth.uid == userId;
+    }
+    function isAdmin() {
+      return isSignedIn() && (request.auth.token.admin == true || request.auth.token.superAdmin == true);
+    }
+    function isSuperAdmin() {
+      return isSignedIn() && request.auth.token.superAdmin == true;
+    }
+    // Fields a normal user is allowed to touch on their own profile.
+    function onlySafeProfileFields() {
+      let allowed = ['fullName', 'phone', 'country', 'photoURL', 'updatedAt', 'lastLoginAt'];
+      return request.resource.data.diff(resource.data).affectedKeys().hasOnly(allowed);
+    }
+
+    // ---------- users ----------
+    match /users/{userId} {
+      allow read: if isOwner(userId) || isAdmin();
+      // Client-side create only happens as part of the registration flow
+      // (auth.js), and must not set role/balance/risk fields to anything
+      // other than the safe defaults.
+      allow create: if isOwner(userId)
+        && request.resource.data.uid == userId
+        && request.resource.data.role == 'user'
+        && request.resource.data.balance == 0
+        && request.resource.data.totalEarned == 0
+        && request.resource.data.totalWithdrawn == 0
+        && request.resource.data.totalReferralEarned == 0
+        && request.resource.data.riskScore == 0;
+      // Owner may only ever touch the safe profile fields listed above.
+      // Everything financial/privileged is Cloud-Functions-only (which
+      // uses the Admin SDK and bypasses these rules by design).
+      allow update: if (isOwner(userId) && onlySafeProfileFields()) || isSuperAdmin();
+      allow delete: if false;
+    }
+
+    // ---------- campaigns (public catalog, admin-managed) ----------
+    match /campaigns/{campaignId} {
+      allow read: if resource.data.status == 'active' || isAdmin();
+      allow write: if isAdmin();
+    }
+
+    // ---------- campaignCompletions / conversions ----------
+    // Users may READ their own completion history but can never write —
+    // completions are only ever created by the postback Cloud Function.
+    match /campaignCompletions/{completionId} {
+      allow read: if isAdmin() || (isSignedIn() && resource.data.userId == request.auth.uid);
+      allow write: if false; // Cloud Functions (Admin SDK) only.
+    }
+
+    // ---------- transactions (ledger — immutable from the client) ----------
+    match /transactions/{transactionId} {
+      allow read: if isAdmin() || (isSignedIn() && resource.data.userId == request.auth.uid);
+      allow write: if false; // Cloud Functions only. Ledger is append-only.
+    }
+
+    // ---------- withdrawals ----------
+    match /withdrawals/{withdrawalId} {
+      allow read: if isAdmin() || (isSignedIn() && resource.data.userId == request.auth.uid);
+      // Users never write directly — createWithdrawal callable validates
+      // balance/min/max and writes via Admin SDK so it can't be forged.
+      allow write: if false;
+    }
+
+    // ---------- referrals ----------
+    match /referrals/{referralId} {
+      allow read: if isAdmin() || (isSignedIn() &&
+        (resource.data.referrerUserId == request.auth.uid || resource.data.referredUserId == request.auth.uid));
+      // Initial pending doc is created client-side at registration (auth.js)
+      // with zeroed/neutral values only; qualification + commission are
+      // Cloud-Function-only.
+      allow create: if isSignedIn()
+        && request.resource.data.referredUserId == request.auth.uid
+        && request.resource.data.status == 'pending'
+        && request.resource.data.qualified == false
+        && request.resource.data.totalEligibleEarnings == 0
+        && request.resource.data.totalCommission == 0;
+      allow update, delete: if false;
+    }
+
+    // ---------- notifications ----------
+    match /notifications/{notificationId} {
+      allow read: if isAdmin() || (isSignedIn() && resource.data.userId == request.auth.uid);
+      // Users may only flip `read` on their own notification.
+      allow update: if isSignedIn() && resource.data.userId == request.auth.uid
+        && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['read', 'readAt']);
+      allow create, delete: if isAdmin();
+    }
+
+    // ---------- announcements (public read while active) ----------
+    match /announcements/{announcementId} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+
+    // ---------- fraudLogs (admin only, never user-visible) ----------
+    match /fraudLogs/{logId} {
+      allow read, write: if isAdmin();
+    }
+
+    // ---------- warnings ----------
+    match /warnings/{warningId} {
+      allow read: if isAdmin() || (isSignedIn() && resource.data.userId == request.auth.uid);
+      allow write: if isAdmin();
+    }
+
+    // ---------- adminLogs (super admin read, functions write) ----------
+    match /adminLogs/{logId} {
+      allow read: if isSuperAdmin();
+      allow write: if false; // written via Admin SDK inside every admin callable
+    }
+
+    // ---------- settings (public read of safe fields, admin write) ----------
+    match /settings/{settingId} {
+      allow read: if true;
+      allow write: if isSuperAdmin();
+    }
+
+    // ---------- adPlacements ----------
+    match /adPlacements/{placementId} {
+      allow read: if resource.data.status == 'active' || isAdmin();
+      allow write: if isAdmin();
+    }
+
+    // Deny everything else by default.
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}

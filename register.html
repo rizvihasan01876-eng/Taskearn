@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Create your account — TaskEarn</title>
+<meta name="robots" content="noindex">
+<link rel="stylesheet" href="/css/global.css">
+<link rel="stylesheet" href="/css/auth.css">
+</head>
+<body>
+<div class="te-auth-shell">
+  <div class="te-auth-panel">
+    <div class="te-auth-form-wrap">
+      <a href="/" class="te-auth-logo">TaskEarn</a>
+      <h1>Create your account</h1>
+      <p class="te-text-muted">Free to join. No payment ever required.</p>
+
+      <form id="register-form" novalidate class="te-mt-24">
+        <div class="te-field" id="field-fullName">
+          <label for="fullName">Full name</label>
+          <input type="text" id="fullName" name="fullName" autocomplete="name" required>
+          <div class="te-field-error" hidden></div>
+        </div>
+        <div class="te-field" id="field-email">
+          <label for="email">Email</label>
+          <input type="email" id="email" name="email" autocomplete="email" required>
+          <div class="te-field-error" hidden></div>
+        </div>
+        <div class="te-field" id="field-phone">
+          <label for="phone">Phone number</label>
+          <input type="tel" id="phone" name="phone" autocomplete="tel" required>
+          <div class="te-field-error" hidden></div>
+        </div>
+        <div class="te-field" id="field-country">
+          <label for="country">Country</label>
+          <select id="country" name="country" required>
+            <option value="">Select country</option>
+            <option value="BD">Bangladesh</option>
+            <option value="IN">India</option>
+            <option value="PK">Pakistan</option>
+            <option value="US">United States</option>
+            <option value="GB">United Kingdom</option>
+            <option value="OTHER">Other</option>
+          </select>
+          <div class="te-field-error" hidden></div>
+        </div>
+        <div class="te-field" id="field-password">
+          <label for="password">Password</label>
+          <input type="password" id="password" name="password" autocomplete="new-password" required>
+          <div class="te-field-hint">At least 8 characters, one uppercase letter, one number.</div>
+          <div class="te-field-error" hidden></div>
+        </div>
+        <div class="te-field" id="field-confirmPassword">
+          <label for="confirmPassword">Confirm password</label>
+          <input type="password" id="confirmPassword" name="confirmPassword" autocomplete="new-password" required>
+          <div class="te-field-error" hidden></div>
+        </div>
+        <div class="te-field" id="field-referralCode">
+          <label for="referralCode">Referral code <span class="te-text-muted">(optional)</span></label>
+          <input type="text" id="referralCode" name="referralCode" autocomplete="off">
+        </div>
+        <button type="submit" class="te-btn te-btn--primary te-btn--block" id="register-submit">Create account</button>
+        <p class="te-field-hint" style="margin-top:14px; text-align:center;">
+          By registering you agree to the <a href="/terms.html">Terms</a> and <a href="/privacy.html">Privacy Policy</a>.
+        </p>
+      </form>
+
+      <p class="te-auth-switch">Already have an account? <a href="/login.html">Log in</a></p>
+    </div>
+  </div>
+  <div class="te-auth-side" aria-hidden="true">
+    <h2>Join TaskEarn</h2>
+    <p>Complete verified tasks, invite friends, and track everything in one place.</p>
+    <ul class="te-auth-side-list">
+      <li>✓ Free to join, always</li>
+      <li>✓ 10% referral commission on qualified earnings</li>
+      <li>✓ Real, provider-verified rewards only</li>
+    </ul>
+  </div>
+</div>
+
+<script type="module">
+  import { registerUser, friendlyAuthError, redirectIfAuthenticated } from "/js/auth.js";
+  import { isValidEmail, isValidPhone, passwordStrength, showToast, getQueryParam } from "/js/utils.js";
+  import { initTheme } from "/js/theme.js";
+
+  initTheme();
+  redirectIfAuthenticated();
+
+  const refFromUrl = getQueryParam("ref");
+  if (refFromUrl) document.getElementById("referralCode").value = refFromUrl;
+
+  const form = document.getElementById("register-form");
+  const submitBtn = document.getElementById("register-submit");
+
+  function setError(fieldId, message) {
+    const field = document.getElementById(fieldId);
+    const err = field.querySelector(".te-field-error");
+    if (message) { field.classList.add("has-error"); err.textContent = message; err.hidden = false; }
+    else { field.classList.remove("has-error"); err.hidden = true; }
+  }
+
+  form.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    const fullName = document.getElementById("fullName").value.trim();
+    const email = document.getElementById("email").value.trim();
+    const phone = document.getElementById("phone").value.trim();
+    const country = document.getElementById("country").value;
+    const password = document.getElementById("password").value;
+    const confirmPassword = document.getElementById("confirmPassword").value;
+    const referralCodeInput = document.getElementById("referralCode").value.trim();
+
+    let valid = true;
+    const check = (id, ok, msg) => { setError(id, ok ? "" : msg); if (!ok) valid = false; };
+    check("field-fullName", fullName.length >= 2, "Enter your full name");
+    check("field-email", isValidEmail(email), "Enter a valid email address");
+    check("field-phone", isValidPhone(phone), "Enter a valid phone number");
+    check("field-country", !!country, "Select your country");
+    const pw = passwordStrength(password);
+    check("field-password", pw.ok, pw.message);
+    check("field-confirmPassword", password === confirmPassword, "Passwords do not match");
+    if (!valid) return;
+
+    submitBtn.disabled = true;
+    submitBtn.textContent = "Creating account…";
+    try {
+      await registerUser({ fullName, email, password, phone, country, referralCodeInput });
+      window.location.href = "/dashboard.html";
+    } catch (err) {
+      showToast(friendlyAuthError(err.code), "error");
+      submitBtn.disabled = false;
+      submitBtn.textContent = "Create account";
+    }
+  });
+</script>
+</body>
+</html>
