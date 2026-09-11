@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TaskEarn — Complete Tasks. Earn Rewards.</title>
+<meta name="description" content="TaskEarn is a rewards platform where you complete surveys, offers, and tasks from trusted providers and get paid for verified work.">
+<meta property="og:title" content="TaskEarn — Complete Tasks. Earn Rewards.">
+<meta property="og:description" content="Complete verified surveys and tasks, track your rewards in a transparent wallet, and withdraw once you qualify.">
+<meta property="og:type" content="website">
+<link rel="stylesheet" href="/css/global.css">
+<style>
+  .te-nav { display: flex; align-items: center; justify-content: space-between; padding: 20px 0; }
+  .te-nav-brand { font-family: var(--font-display); font-size: 1.4rem; font-weight: 600; }
+  .te-nav-actions { display: flex; gap: 10px; }
+  .te-hero { padding: 64px 0 40px; display: grid; grid-template-columns: 1.1fr .9fr; gap: 48px; align-items: center; }
+  .te-hero p.lead { font-size: 1.15rem; max-width: 50ch; }
+  .te-hero-actions { display: flex; gap: 12px; margin-top: 24px; flex-wrap: wrap; }
+  .te-hero-card { background: var(--paper-0); border: 1px solid var(--line-200); border-radius: var(--radius-lg); padding: 28px; box-shadow: var(--shadow-card); }
+  .te-hero-card-row { display: flex; justify-content: space-between; padding: 12px 0; border-bottom: 1px solid var(--line-200); }
+  .te-hero-card-row:last-child { border-bottom: none; }
+  .te-section-alt { background: var(--paper-100); padding: 64px 0; }
+  .te-grid-3 { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 20px; margin-top: 32px; }
+  .te-step { display: flex; gap: 16px; }
+  .te-step-num { font-family: var(--font-display); font-size: 1.4rem; color: var(--moss-600); flex-shrink: 0; width: 40px; }
+  .te-faq-item { border-bottom: 1px solid var(--line-200); padding: 18px 0; }
+  .te-faq-item summary { cursor: pointer; font-weight: 700; font-size: 1.02rem; }
+  .te-cta-band { background: var(--ink-900); color: #fff; border-radius: var(--radius-lg); padding: 48px; text-align: center; margin: 64px 0; }
+  .te-cta-band h2, .te-cta-band p { color: #fff; }
+  footer { border-top: 1px solid var(--line-200); padding: 40px 0; color: var(--ink-500); font-size: .9rem; }
+  footer .te-footer-links { display: flex; gap: 20px; flex-wrap: wrap; margin-top: 8px; }
+  @media (max-width: 860px) { .te-hero { grid-template-columns: 1fr; } }
+</style>
+</head>
+<body>
+
+<header class="te-container">
+  <nav class="te-nav" aria-label="Primary">
+    <a href="/" class="te-nav-brand">TaskEarn</a>
+    <div class="te-nav-actions">
+      <button type="button" class="te-icon-btn" data-theme-toggle aria-label="Toggle dark mode">🌓</button>
+      <a href="/login.html" class="te-btn te-btn--ghost">Log in</a>
+      <a href="/register.html" class="te-btn te-btn--primary">Register</a>
+    </div>
+  </nav>
+</header>
+
+<main>
+  <section class="te-container te-hero">
+    <div>
+      <h1>Complete tasks.<br>Earn rewards.</h1>
+      <p class="lead">TaskEarn connects you with verified surveys, offers, and micro-tasks from trusted providers. Every reward is confirmed before it's credited, and you can track exactly where it came from.</p>
+      <div class="te-hero-actions">
+        <a href="/register.html" class="te-btn te-btn--primary">Create free account</a>
+        <a href="#how-it-works" class="te-btn te-btn--ghost">See how it works</a>
+      </div>
+    </div>
+    <div class="te-hero-card" aria-hidden="true">
+      <div class="te-hero-card-row"><span class="te-text-muted">Available tasks today</span><strong>Updated live</strong></div>
+      <div class="te-hero-card-row"><span class="te-text-muted">Reward verification</span><strong>Provider-confirmed</strong></div>
+      <div class="te-hero-card-row"><span class="te-text-muted">Withdrawal review</span><strong>Manual + automated checks</strong></div>
+      <div class="te-hero-card-row"><span class="te-text-muted">Referral commission</span><strong class="te-text-coin">10% of qualified earnings</strong></div>
+    </div>
+  </section>
+
+  <section class="te-section-alt" id="how-it-works">
+    <div class="te-container">
+      <h2>How TaskEarn works</h2>
+      <p>A straightforward loop: pick a task, complete it with the provider, and get paid once it's verified.</p>
+      <div class="te-grid-3">
+        <div class="te-step"><span class="te-step-num">1</span><div><h3>Choose a task</h3><p>Browse active surveys, offers, and tasks available in your country.</p></div></div>
+        <div class="te-step"><span class="te-step-num">2</span><div><h3>Complete it</h3><p>Finish the task directly with the provider — TaskEarn never asks you to pay anything.</p></div></div>
+        <div class="te-step"><span class="te-step-num">3</span><div><h3>Get verified</h3><p>The provider confirms your completion; TaskEarn credits your wallet once that confirmation arrives.</p></div></div>
+        <div class="te-step"><span class="te-step-num">4</span><div><h3>Withdraw</h3><p>Once you meet the minimum, request a withdrawal to a supported payment method.</p></div></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="te-container" style="padding: 64px 0;">
+    <h2>Built for transparency</h2>
+    <div class="te-grid-3">
+      <div class="te-card">
+        <h3>Earn through real tasks</h3>
+        <p>Campaigns come from vetted survey and offer providers. Rewards vary by task and are shown up front before you start.</p>
+      </div>
+      <div class="te-card">
+        <h3>Refer and earn together</h3>
+        <p>Share your referral link. When someone you referred completes a qualifying task, you earn a 10% commission on that reward — at no extra cost to them.</p>
+      </div>
+      <div class="te-card">
+        <h3>A secure wallet</h3>
+        <p>Every credit and debit is logged as a transaction. Your balance is never a number we just edit — it's the sum of a verifiable ledger.</p>
+      </div>
+      <div class="te-card">
+        <h3>Reviewed withdrawals</h3>
+        <p>Withdrawal requests go through validation and review before payout, to keep the whole system fair for everyone using it.</p>
+      </div>
+      <div class="te-card">
+        <h3>Account protection</h3>
+        <p>We use multi-signal risk review rather than penalizing people for things like a shared IP address or a public network.</p>
+      </div>
+      <div class="te-card">
+        <h3>Clear task details</h3>
+        <p>Each task shows its provider, reward, requirements, and country availability before you commit any time to it.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="te-section-alt">
+    <div class="te-container">
+      <h2>Frequently asked questions</h2>
+      <div>
+        <details class="te-faq-item"><summary>Is TaskEarn free to join?</summary><p class="te-mt-24">Yes. Registration is free, and TaskEarn never asks you to pay to access tasks.</p></details>
+        <details class="te-faq-item"><summary>How are rewards verified?</summary><p class="te-mt-24">Each provider confirms task completion on their end and sends that confirmation to TaskEarn before a reward is credited to your wallet.</p></details>
+        <details class="te-faq-item"><summary>Why is a reward showing as pending?</summary><p class="te-mt-24">Some providers take time to verify a completion. The reward appears once that verification is received — this can take from minutes to a few days depending on the provider.</p></details>
+        <details class="te-faq-item"><summary>When can I withdraw?</summary><p class="te-mt-24">Once your balance meets the minimum withdrawal amount shown in your wallet, you can submit a withdrawal request for review.</p></details>
+        <details class="te-faq-item"><summary>How does the referral program work?</summary><p class="te-mt-24">You get a unique referral link. When someone registers through it and later completes a qualifying task, you receive a 10% commission on that reward.</p></details>
+      </div>
+    </div>
+  </section>
+
+  <div class="te-container">
+    <div class="te-cta-band">
+      <h2>Ready to start earning?</h2>
+      <p>Create your account and see what tasks are available in your country.</p>
+      <a href="/register.html" class="te-btn te-btn--primary">Create free account</a>
+    </div>
+  </div>
+</main>
+
+<footer class="te-container">
+  <div>© <span id="te-year"></span> TaskEarn. All rights reserved.</div>
+  <div class="te-footer-links">
+    <a href="/terms.html">Terms of Service</a>
+    <a href="/privacy.html">Privacy Policy</a>
+    <a href="/contact.html">Contact</a>
+    <a href="/help.html">Help / FAQ</a>
+  </div>
+</footer>
+
+<script type="module">
+  import { initTheme } from "/js/theme.js";
+  initTheme();
+  document.getElementById("te-year").textContent = new Date().getFullYear();
+</script>
+</body>
+</html>

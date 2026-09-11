@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dashboard — TaskEarn</title>
+<meta name="robots" content="noindex">
+<link rel="stylesheet" href="/css/global.css">
+<link rel="stylesheet" href="/css/dashboard.css">
+<link rel="stylesheet" href="/css/responsive.css">
+</head>
+<body>
+<div class="te-shell">
+  <aside class="te-sidebar" id="te-shell-sidebar"></aside>
+  <div class="te-main">
+    <header class="te-topbar" id="te-shell-topbar"></header>
+    <main class="te-content">
+      <div class="te-page-head">
+        <div>
+          <h1 id="greeting">Welcome back</h1>
+          <p class="te-text-muted">Here's what's happening with your account.</p>
+        </div>
+        <a href="/earn.html" class="te-btn te-btn--primary">Browse tasks</a>
+      </div>
+
+      <div id="announcement-slot"></div>
+
+      <div class="te-stat-grid" id="stat-grid">
+        <div class="te-stat-card"><div class="te-skel" style="height:52px;"></div></div>
+        <div class="te-stat-card"><div class="te-skel" style="height:52px;"></div></div>
+        <div class="te-stat-card"><div class="te-skel" style="height:52px;"></div></div>
+        <div class="te-stat-card"><div class="te-skel" style="height:52px;"></div></div>
+        <div class="te-stat-card"><div class="te-skel" style="height:52px;"></div></div>
+        <div class="te-stat-card"><div class="te-skel" style="height:52px;"></div></div>
+      </div>
+
+      <section class="te-section">
+        <div class="te-section-head">
+          <h2>Recent transactions</h2>
+          <a href="/transactions.html">View all</a>
+        </div>
+        <div class="te-table-wrap">
+          <table class="te-table">
+            <thead><tr><th>Date</th><th>Type</th><th>Amount</th><th>Status</th></tr></thead>
+            <tbody id="recent-transactions"><tr><td colspan="4"><div class="te-skel" style="height:20px;"></div></td></tr></tbody>
+          </table>
+        </div>
+      </section>
+
+      <section class="te-section">
+        <div class="te-section-head">
+          <h2>Featured tasks</h2>
+          <a href="/earn.html">See all tasks</a>
+        </div>
+        <div class="te-grid-3" id="featured-campaigns">
+          <div class="te-card"><div class="te-skel" style="height:90px;"></div></div>
+        </div>
+      </section>
+    </main>
+  </div>
+</div>
+
+<script type="module" src="/js/dashboard.js"></script>
+</body>
+</html>

@@ -1,0 +1,16 @@
+/* Extra small-screen refinements that don't belong in component files */
+
+@media (max-width: 640px) {
+  .te-container { padding: 0 16px; }
+  h1 { font-size: 1.9rem; }
+  .te-stat-grid { grid-template-columns: 1fr 1fr; }
+  table.te-table { min-width: 520px; }
+}
+
+@media (max-width: 420px) {
+  .te-stat-grid { grid-template-columns: 1fr; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
+}
